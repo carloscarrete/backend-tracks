@@ -1,5 +1,5 @@
-const handleHttpError = (res, error, code=403) => {
-
+const handleHttpError = (res, message, code = 403) => {
+    res.status(code).send({error: message})
 }
 
-module.exports = {handleHttpError}
+module.exports = { handleHttpError }
