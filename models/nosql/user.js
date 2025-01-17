@@ -1,4 +1,6 @@
-const mongoose = require('mongoose');;
+const mongoose = require('mongoose');
+const mongooseDelete = require('mongoose-delete');
+
 
 const UserSchema = new mongoose.Schema(
     {
@@ -34,5 +36,6 @@ role: {
         }
 */
 
+UserSchema.plugin(mongooseDelete, { overrideMethods: 'all', deletedAt: true });
 module.exports = mongoose.model('Users', UserSchema);
 

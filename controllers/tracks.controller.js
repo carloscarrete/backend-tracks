@@ -11,8 +11,16 @@ const getItems = async (req, res) => {
     }
 }
 
-const getItem = (req, res) => {
-    res.send({data: ['hola', 'mundo']})
+const getItem = async (req, res) => {
+    try{
+        req = matchedData(req);
+        const {id} = req;
+        const data = await tracksModel.findById(id);
+        res.send({data})
+    }
+    catch(error){
+        handleHttpError(res, error, 403)
+    }
 }
 
 const createItem = async (req, res) => {
@@ -26,14 +34,28 @@ const createItem = async (req, res) => {
     }
 }
 
-const updateItem = (req, res) => {
-
+const updateItem = async (req, res) => {
+    try{
+        const {id, ...body} = matchedData(req);
+        const data = await tracksModel.findByIdAndUpdate(id, body, {new: true});
+        console.log(body)
+        res.send({data})
+    }catch(error){
+        handleHttpError(res, 'ERR_UPDATING_TRACK', 403)
+    }
 }
 
-const deleteItem = (req, res) => {
-
+const deleteItem = async (req, res) => {
+    try{
+        const {id} = matchedData(req);
+        //const data = await tracksModel.findOneAndDelete({_id: id});
+        //const data = await tracksModel.deleteOne({_id: id});
+        const data = await tracksModel.delete({_id: id});
+        res.send({data})
+    }catch(error){
+        handleHttpError(res, 'ERR_DELETING_TRACK', 403)
+    }
 }
-
 
 module.exports = {
     getItems,
