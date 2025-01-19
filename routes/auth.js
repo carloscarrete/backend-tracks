@@ -3,19 +3,12 @@ const { validatorRegister, validatorLogin } = require('../validators/auth');
 const { matchedData } = require('express-validator');
 const { encryptPassword } = require('../utils/handlePassword');
 const { userModel } = require('../models');
+const { generateJWT } = require('../utils/handleJWT');
+const { registerController, loginController } = require('../controllers/auth.controller');
 const router = express.Router();
 
 
-router.post('/register', validatorRegister, async (req, res) => {
-    req = matchedData(req);
-    const password = await encryptPassword(req.password);
-    const body = { ...req, password }
-    const data = await userModel.create(body);
-    data.set('password', undefined, {strict: false});
-    res.send({data})
-})
+router.post('/register', validatorRegister, registerController)
 
-router.post('/login', validatorLogin, (req, res) => {
-
-})
+router.post('/login', validatorLogin, loginController)
 module.exports = router;
