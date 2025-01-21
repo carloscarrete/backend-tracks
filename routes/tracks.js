@@ -3,11 +3,12 @@ const { getItem, getItems, createItem, updateItem, deleteItem } = require('../co
 const { validatorCreateItem, validatorGetItem } = require('../validators/tracks');
 const { customHeader } = require('../middleware/customHeader');
 const { authMiddleWare } = require('../middleware/session');
+const { checkRol } = require('../middleware/rol');
 const router = express.Router();
 
 router.get('/', authMiddleWare, getItems)
-router.get('/:id',  validatorGetItem, getItem)
-router.post('/', validatorCreateItem, customHeader ,createItem)
-router.put('/:id', validatorGetItem, validatorCreateItem, updateItem)
-router.delete('/:id', validatorGetItem, deleteItem)
+router.get('/:id',  authMiddleWare, validatorGetItem, getItem)
+router.post('/', authMiddleWare, checkRol(['admin']) ,validatorCreateItem ,createItem)
+router.put('/:id', authMiddleWare, validatorGetItem, validatorCreateItem, updateItem)
+router.delete('/:id', authMiddleWare, validatorGetItem, deleteItem)
 module.exports = router;
