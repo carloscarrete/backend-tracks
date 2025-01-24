@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(express.static('storage'));
 
 
-morganBody(app, { noColors: true, stream: loggerStream, skip: function (req, res) { return res.statusCode < 400 } });
+morganBody(app, { noColors: true, stream: loggerStream, skip: function (req, res) { return res.statusCode < 400 }, filterParameters: ['password'] });
 
 
 const port = process.env.PORT || 3000;
