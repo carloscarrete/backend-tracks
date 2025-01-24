@@ -5,9 +5,12 @@ const morganBody = require('morgan-body');
 const dotenv = require('dotenv');
 const {connectDB} = require('./config/mongo');
 const { loggerStream } = require('./utils/handleLogger');
+const { dbConnectSQL } = require('./config/mysql');
+
+const ENGINE_DB = process.env.ENGINE_DB;
 
 dotenv.config();
-connectDB();
+(ENGINE_DB === 'nosql') ? connectDB() : dbConnectSQL();
 
 app.use(cors());
 app.use(express.json());
