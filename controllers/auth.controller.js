@@ -23,6 +23,7 @@ const registerController = async (req, res) => {
         }
         res.send({ data })
     }catch(error){
+        console.log(error)
         handleHttpError(res, 'ERR_REGISTER', 403)
     }
 }
@@ -30,7 +31,7 @@ const registerController = async (req, res) => {
 const loginController = async (req, res) => {
     try{
         req = matchedData(req);
-        const user = await userModel.findOne({ email: req.email }).select('password name role email');
+        const user = await userModel.findOne({ email: req.email })//.select('password name role email'); modelo de mongo
         if(!user){
             handleHttpError(res, 'USER_NOT_FOUND', 404);
             return;
@@ -44,6 +45,7 @@ const loginController = async (req, res) => {
         }
 
         user.set('password', undefined, { strict: false });
+        //user.set('password', undefined, { strict: false }); tambien de mongo
         const data = {
             token: generateJWT(user),
             user

@@ -5,7 +5,7 @@ const { handleHttpError } = require("../utils/handleError");
 const getItems = async (req, res) => {
     const user = req.user;
     try{
-        const data = await tracksModel.find({});
+        const data = await tracksModel.findAll();
         res.send({data, user})
     }catch(error){
         handleHttpError(res, error, 403)
@@ -16,7 +16,9 @@ const getItem = async (req, res) => {
     try{
         req = matchedData(req);
         const {id} = req;
-        const data = await tracksModel.findById(id);
+        const data = await tracksModel.findOne({
+            where: {id}
+        });
         res.send({data})
     }
     catch(error){
@@ -25,12 +27,15 @@ const getItem = async (req, res) => {
 }
 
 const createItem = async (req, res) => {
+    console.log(matchedData(req))
     try{
-        //const {body} = req;
         const body = matchedData(req);
+        //const {body} = req;
         const data = await tracksModel.create(body);
+        console.log('casaa', body)
         res.send({data})
     }catch(error){
+        console.log(error);
         handleHttpError(res, 'ERR_CREATING_TRACK', 403)
     }
 }
@@ -38,7 +43,8 @@ const createItem = async (req, res) => {
 const updateItem = async (req, res) => {
     try{
         const {id, ...body} = matchedData(req);
-        const data = await tracksModel.findByIdAndUpdate(id, body, {new: true});
+        //const data = await tracksModel.findByIdAndUpdate(id, body, {new: true});
+        const data = await tracksModel.update(body, {where: {id}});
         console.log(body)
         res.send({data})
     }catch(error){

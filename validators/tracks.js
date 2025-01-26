@@ -11,12 +11,12 @@ const validatorCreateItem = [
     check('artist.nationality').exists().notEmpty().isLength({min: 3, max:150}),
     check('duration.start').exists().notEmpty().isNumeric(),
     check('duration.end').exists().notEmpty().isNumeric(),
-    check('mediaId').exists().notEmpty().isMongoId(),
+    check('mediaId').exists().notEmpty(),//.isMongoId(),
     validateResults
 ]
 
 const validatorGetItem = [
-    check('id').exists().notEmpty().isMongoId(),
+    check('id').exists().notEmpty(),//.isMongoId(),
     validateResults
 ]
 

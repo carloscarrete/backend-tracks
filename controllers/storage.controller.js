@@ -34,6 +34,7 @@ const createItem = async (req, res) => {
         const data = await storagesModel.create(fileData);
         res.send({ data })
     }catch(error){
+        console.log(error)
         handleHttpError(res, 'ERR_CREATING_TRACK', 403)
     }
 }

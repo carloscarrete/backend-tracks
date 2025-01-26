@@ -1,4 +1,6 @@
 const jsownwebtoken = require('jsonwebtoken');
+const getProperties = require('./handlePropertiesEngine');
+const propertiesKey = getProperties();
 
 /**
  * Generates a JWT token for the given user
@@ -6,8 +8,13 @@ const jsownwebtoken = require('jsonwebtoken');
  * @returns {string} The generated JWT token
  */
 const generateJWT = (user) => {
+    const userId = user.id || user.dataValues?.id;
+    if (!userId) {
+        throw new Error("User ID is missing.");
+    }
+
     const sign = jsownwebtoken.sign({
-        _id: user._id,
+        id: userId,
         role: user.role
     },
         process.env.JWT_SECRET,
