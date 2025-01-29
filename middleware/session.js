@@ -20,17 +20,22 @@ const authMiddleWare =  async (req, res, next) => {
             return;
         }
 
-       // console.log('PropertiesKey:', propertiesKey);
-       // console.log('Userx:', user);
-
         const query = {
             [propertiesKey.id] : user.id
 
         }
 
         req.user = await userModel.findOne(query);
-        const nnn = await userModel.findOne({_id: '679480b1ee62f11743a65453'});
-       // console.log('nnn:', nnn);
+
+          // Eliminar la propiedad password de req.user (funciona para Mongoose y Sequelize)
+          if (req.user && req.user.password) {
+            if (req.user.toJSON) {
+                // Si el objeto tiene un método toJSON (común en Mongoose y Sequelize)
+                req.user = req.user.toJSON();
+            }
+            delete req.user.password; // Elimina la propiedad password
+        }
+
         next();
     } catch (error) {
         handleHttpError(res, error, 401)

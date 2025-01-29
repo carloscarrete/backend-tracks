@@ -16,4 +16,20 @@ const Storages = sequelize.define(
     }
 )
 
+Storages.findAllData = function () {
+    return Storages.findAll()
+}
+
+Storages.findOneData = function (id) {
+    return Storages.findByPk(id)
+}
+
+Storages.deleteOneData = function (id) {
+    return Storages.destroy({
+        where: {
+            id
+        }
+    })
+}
+
 module.exports = Storages

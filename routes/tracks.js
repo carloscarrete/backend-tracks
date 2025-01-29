@@ -11,4 +11,4 @@ router.get('/:id',  authMiddleWare, validatorGetItem, getItem)
 router.post('/', authMiddleWare, checkRol(['admin']) ,validatorCreateItem ,createItem)
 router.put('/:id', authMiddleWare, validatorGetItem, validatorCreateItem, updateItem)
 router.delete('/:id', authMiddleWare, validatorGetItem, deleteItem)
-module.exports = router;
+module.exports = router;        

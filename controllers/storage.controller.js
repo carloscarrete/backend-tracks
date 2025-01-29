@@ -7,20 +7,22 @@ const MEDIA_PATH = `${__dirname}/../storage`;
 
 const getItems = async (req, res) => {
     try {
-        const data = await storagesModel.find({});
+        const data = await storagesModel.findAllData();
         res.send({ data })
     } catch (error) {
-        handleHttpError(res, error, 403)
+        console.log(error)
+        handleHttpError(res, 'ERR_GETTING_TRACK', 403)
     }
 }
 
 const getItem = async (req, res) => {
     try {
         const { id } = req.params;
-        const data = await storagesModel.findById(id);
+        const data = await storagesModel.findOneData(id);
         res.send({ data })
     } catch (error) {
-        handleHttpError(res, error, 403)
+        console.log(error)
+        handleHttpError(res, 'ERR_GETTING_TRACK', 403)
     }
 }
 
@@ -46,20 +48,34 @@ const updateItem = async (req, res) => {
 const deleteItem = async (req, res) => {
     try {
         const { id } = req.params;
-        const data = await storagesModel.findById({_id: id});
+        
+        // Buscar el registro primero
+        const data = await storagesModel.findOneData(id);
+        
+        if (!data) {
+            return handleHttpError(res, 'FILE_NOT_FOUND', 404);
+        }
+
+        // Eliminar el archivo físico
         const filePath = `${MEDIA_PATH}/${data.filename}`;
         fs.unlinkSync(filePath);
-        console.log(filePath)
-        //await storagesModel.delete({_id: id});
-        await storagesModel.deleteOne({_id: id}); //No es necesario restaurar
+        console.log(filePath);
+        // Eliminar el registro
+        await storagesModel.deleteOneData(id);
+
+        // Eliminar el registro de la base de datos
+        //await data.destroy(); // Equivalente a deleteOne en Mongoose
+
         res.send({ 
             filePath,
             deleted: true
-         })
+        });
+        
     } catch (error) {
-        handleHttpError(res, 'ERR_DELETING_TRACK', 403)
+        console.log(error);
+        handleHttpError(res, 'ERR_DELETING_FILE', 403);
     }
-}
+};
 
 module.exports = {
     getItems,

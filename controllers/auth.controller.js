@@ -54,6 +54,7 @@ const loginController = async (req, res) => {
         res.send({ data })
         
     }catch(error){
+        console.log(matchedData(req))
         handleHttpError(res, 'ERR_LOGIN', 403)
     }
 }

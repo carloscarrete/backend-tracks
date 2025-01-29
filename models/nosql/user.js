@@ -16,7 +16,7 @@ const UserSchema = new mongoose.Schema(
         password: {
             type: String,
             required: true,
-            select: false //No se mostrará el password
+           // select: false No se mostrará el password
         },
         role: {
             type: String,
