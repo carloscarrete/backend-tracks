@@ -1,7 +1,8 @@
 const { check } = require("express-validator");
 const { validateResults } = require("../utils/handleValidator");
+const ENGINE_DB = process.env.ENGINE_DB;
 
-const validatorCreateItem = [
+const validatorCreateItem = (ENGINE_DB === 'nosql') ? [
     check('name').exists().notEmpty().isLength({min: 3, max:150}),
     check('album').exists().notEmpty().isLength({min: 3, max:150}),
     check('cover').exists().notEmpty().isLength({min: 3}),
@@ -13,7 +14,18 @@ const validatorCreateItem = [
     check('duration.end').exists().notEmpty().isNumeric(),
     check('mediaId').exists().notEmpty(),//.isMongoId(),
     validateResults
-]
+] : [
+    check('name').exists().notEmpty().isLength({min: 3, max:150}),
+    check('album').exists().notEmpty().isLength({min: 3, max:150}),
+    check('cover').exists().notEmpty().isLength({min: 3}),
+    check('artist_name').exists().notEmpty().isLength({min: 3, max:150}),
+    check('artist_nickname').exists().notEmpty().isLength({min: 3, max:150}),
+    check('artist_nationality').exists().notEmpty().isLength({min: 3, max:150}),
+    check('duration_start').exists().notEmpty().isNumeric(),
+    check('duration_end').exists().notEmpty().isNumeric(),
+    check('mediaId').exists().notEmpty(),//.isMongoId(),
+    validateResults
+];
 
 const validatorGetItem = [
     check('id').exists().notEmpty(),//.isMongoId(),
