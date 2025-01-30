@@ -6,6 +6,9 @@ const dotenv = require('dotenv');
 const {connectDB} = require('./config/mongo');
 const { loggerStream } = require('./utils/handleLogger');
 const { dbConnectSQL } = require('./config/mysql');
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./docs/swagger');
+
 
 const ENGINE_DB = process.env.ENGINE_DB;
 
@@ -21,6 +24,9 @@ morganBody(app, { noColors: true, stream: loggerStream, skip: function (req, res
 
 
 const port = process.env.PORT || 3000;
+
+/* Documentación */
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 /* Rutas */
 app.use('/api/v1', require('./routes'));

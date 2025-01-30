@@ -21,6 +21,7 @@ const registerController = async (req, res) => {
             token: generateJWT(dataUser),
             user: dataUser
         }
+        res.status(201)
         res.send({ data })
     }catch(error){
         console.log(error)
@@ -51,6 +52,7 @@ const loginController = async (req, res) => {
             user
         }
 
+        res.status(200)
         res.send({ data })
         
     }catch(error){
