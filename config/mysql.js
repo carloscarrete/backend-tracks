@@ -1,6 +1,7 @@
 const { Sequelize } = require('sequelize');
+const NODE_ENV = process.env.NODE_ENV;
 
-const database = process.env.DB_NAME;
+const database = (NODE_ENV === 'test') ? process.env.DB_HOST_TEST : process.env.DB_HOST;
 const username = process.env.DB_USER;
 const password = process.env.DB_PASSWORD;
 const host = process.env.DB_HOST;

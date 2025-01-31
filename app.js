@@ -3,7 +3,7 @@ const cors = require('cors');
 const app = express();
 const morganBody = require('morgan-body');
 const dotenv = require('dotenv');
-const {connectDB} = require('./config/mongo');
+const { connectDB } = require('./config/mongo');
 const { loggerStream } = require('./utils/handleLogger');
 const { dbConnectSQL } = require('./config/mysql');
 const swaggerUi = require('swagger-ui-express');
@@ -11,6 +11,7 @@ const swaggerSpec = require('./docs/swagger');
 
 
 const ENGINE_DB = process.env.ENGINE_DB;
+const NODE_ENV = process.env.NODE_ENV || 'dev';
 
 dotenv.config();
 (ENGINE_DB === 'nosql') ? connectDB() : dbConnectSQL();
@@ -31,6 +32,10 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 /* Rutas */
 app.use('/api/v1', require('./routes'));
 
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-});
+if (NODE_ENV !== 'test') {
+    app.listen(port, () => {
+        console.log(`Server is running on port ${port}`);
+    });
+}
+
+module.exports = app;

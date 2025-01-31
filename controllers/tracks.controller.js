@@ -34,6 +34,7 @@ const createItem = async (req, res) => {
         //const {body} = req;
         const data = await tracksModel.create(body);
         console.log('casaa', body)
+        res.status(201)
         res.send({ data })
     } catch (error) {
         console.log(error);
