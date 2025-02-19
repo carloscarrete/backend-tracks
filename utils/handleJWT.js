@@ -8,7 +8,7 @@ const propertiesKey = getProperties();
  * @returns {string} The generated JWT token
  */
 const generateJWT = (user) => {
-    const userId = user.id || user.dataValues?.id;
+    const userId = user.id || user._id || user.dataValues?.id;
     if (!userId) {
         throw new Error("User ID is missing.");
     }

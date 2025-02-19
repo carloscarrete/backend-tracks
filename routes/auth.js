@@ -4,7 +4,8 @@ const { matchedData } = require('express-validator');
 const { encryptPassword } = require('../utils/handlePassword');
 const { userModel } = require('../models');
 const { generateJWT } = require('../utils/handleJWT');
-const { registerController, loginController } = require('../controllers/auth.controller');
+const { registerController, loginController, renewToken } = require('../controllers/auth.controller');
+const { authMiddleWare } = require('../middleware/session');
 const router = express.Router();
 
 /**
@@ -48,4 +49,6 @@ router.post('/register', validatorRegister, registerController)
  *         description: Error in the request
  */
 router.post('/login', validatorLogin, loginController)
+
+router.get('/renew',authMiddleWare, renewToken)
 module.exports = router;

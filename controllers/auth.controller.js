@@ -11,7 +11,7 @@ const { handleHttpError } = require("../utils/handleError");
  * @returns {Promise<void>}
  */
 const registerController = async (req, res) => {
-    try{
+    try {
         req = matchedData(req);
         const password = await encryptPassword(req.password);
         const body = { ...req, password }
@@ -23,24 +23,24 @@ const registerController = async (req, res) => {
         }
         res.status(201)
         res.send({ data })
-    }catch(error){
+    } catch (error) {
         console.log(error)
         handleHttpError(res, 'ERR_REGISTER', 403)
     }
 }
 
 const loginController = async (req, res) => {
-    try{
+    try {
         req = matchedData(req);
         const user = await userModel.findOne({ email: req.email })//.select('password name role email'); modelo de mongo
-        if(!user){
+        if (!user) {
             handleHttpError(res, 'USER_NOT_FOUND', 404);
             return;
         }
 
         const hashPassword = user.password;
         const check = await comparePassword(req.password, hashPassword);
-        if(!check){
+        if (!check) {
             handleHttpError(res, 'PASSWORD_INVALID', 401);
             return;
         }
@@ -54,12 +54,29 @@ const loginController = async (req, res) => {
 
         res.status(200)
         res.send({ data })
-        
-    }catch(error){
+
+    } catch (error) {
         console.log(matchedData(req))
         handleHttpError(res, 'ERR_LOGIN', 403)
     }
 }
 
+const renewToken = async (req, res) => {
+    try {
+        const user = req.user;
 
-module.exports = { registerController, loginController }
+        const data = {
+            token: generateJWT(user),
+            user
+        }
+
+        res.status(200)
+        res.send({ data })
+
+    } catch (error) {
+        handleHttpError(res, 'ERR_RENEW_TOKEN', 403)
+    }
+}
+
+
+module.exports = { registerController, loginController, renewToken }
