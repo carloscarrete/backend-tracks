@@ -13,6 +13,7 @@ const validatorCreateItem = (ENGINE_DB === 'nosql') ? [
     check('duration.start').exists().notEmpty().isNumeric(),
     check('duration.end').exists().notEmpty().isNumeric(),
     check('mediaId').exists().notEmpty(),//.isMongoId(),
+    //check('favorite').exists().notEmpty().isBoolean(),
     validateResults
 ] : [
     check('name').exists().notEmpty().isLength({min: 3, max:150}),

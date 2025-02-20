@@ -43,8 +43,8 @@ const createItem = async (req, res) => {
 }
 
 const updateItem = async (req, res) => {
-    try{
-        const {id, ...body} = matchedData(req);
+    try {
+        const { id, ...body } = matchedData(req);
         const track = await tracksModel.findOneData(id);
         if (!track) {
             return handleHttpError(res, 'TRACK_NOT_FOUND', 404);
@@ -52,8 +52,8 @@ const updateItem = async (req, res) => {
         const data = await tracksModel.updateOneData(id, body);
         //const data = await tracksModel.findByIdAndUpdate(id, body, {new: true});
         console.log(body)
-        res.send({data})
-    }catch(error){
+        res.send({ data })
+    } catch (error) {
         console.log(error);
         handleHttpError(res, 'ERR_UPDATING_TRACK', 403)
     }
@@ -105,10 +105,25 @@ const deleteItem = async (req, res) => {
     }
 };
 
+const toggleFavoriteItem = async (req, res) => {
+    try {
+        const { id } = matchedData(req);
+        const track = await tracksModel.findOneData(id);
+        if (!track) {
+            return handleHttpError(res, 'TRACK_NOT_FOUND', 404);
+        }
+        const updateTrack = await tracksModel.updateOneData(id, { favorite: !track.favorite });
+        res.status(200).send({ data: updateTrack })
+    } catch (error) {
+        handleHttpError(res, 'ERR_TOGGLE_FAVORITE_TRACK', 403)
+    }
+}
+
 module.exports = {
     getItems,
     getItem,
     createItem,
     updateItem,
-    deleteItem
+    deleteItem,
+    toggleFavoriteItem
 }

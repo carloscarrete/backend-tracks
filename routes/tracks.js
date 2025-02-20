@@ -1,5 +1,5 @@
 const express = require('express');
-const { getItem, getItems, createItem, updateItem, deleteItem } = require('../controllers/tracks.controller');
+const { getItem, getItems, createItem, updateItem, deleteItem, toggleFavoriteItem } = require('../controllers/tracks.controller');
 const { validatorCreateItem, validatorGetItem } = require('../validators/tracks');
 const { customHeader } = require('../middleware/customHeader');
 const { authMiddleWare } = require('../middleware/session');
@@ -136,4 +136,7 @@ router.put('/:id', authMiddleWare, validatorGetItem, validatorCreateItem, update
  *         description: Error in the request
  */
 router.delete('/:id', authMiddleWare, validatorGetItem, deleteItem)
+
+router.put('/:id/favorite', authMiddleWare, validatorGetItem, toggleFavoriteItem)
+
 module.exports = router;        

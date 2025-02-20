@@ -35,6 +35,10 @@ const TracksSchema = new mongoose.Schema(
                 type: Number,
             }
         },
+        favorite: {
+            type: Boolean,
+            default: false
+        },
         mediaId: {
             type: mongoose.Schema.Types.ObjectId,
         }
