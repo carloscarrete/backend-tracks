@@ -112,7 +112,7 @@ const toggleFavoriteItem = async (req, res) => {
         if (!track) {
             return handleHttpError(res, 'TRACK_NOT_FOUND', 404);
         }
-        const updateTrack = await tracksModel.updateOneData(id, { favorite: !track.favorite });
+        const updateTrack = await tracksModel.updateOneData(id, { favorite: !track[0].favorite });
         res.status(200).send({ data: updateTrack })
     } catch (error) {
         handleHttpError(res, 'ERR_TOGGLE_FAVORITE_TRACK', 403)
